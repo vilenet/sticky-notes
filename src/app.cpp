@@ -8,12 +8,20 @@
 
 StickyNoteApp::StickyNoteApp() : text_changed(false) {
     window = new Fl_Double_Window(300, 350, "Sticky Notes");
+    window->resizable(window);
     
     text_buffer = new Fl_Text_Buffer();
     text_editor = new Fl_Text_Editor(0, 25, 300, 325);
     text_editor->buffer(text_buffer);
-    
+    text_editor->box(FL_NO_BOX);
+    Fl_Color editor_color = fl_rgb_color(255, 248, 209); //Default color #FFF8D1
+    text_editor->color(editor_color);
+
+    Fl_Color menu_color = fl_rgb_color(255, 242, 171); //Default color #FFF2AB
     menu_bar = new Fl_Menu_Bar(0, 0, 300, 25);
+    menu_bar->color(menu_color);
+    menu_bar->box(FL_FLAT_BOX);
+
     menu_bar->add("File/New",        FL_COMMAND + 'n', menu_new_callback,     this);
     menu_bar->add("File/Open",       FL_COMMAND + 'o', menu_open_callback,    this, FL_MENU_DIVIDER);
     menu_bar->add("File/Save",       FL_COMMAND + 's', menu_save_callback,    this);
