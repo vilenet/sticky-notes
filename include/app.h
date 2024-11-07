@@ -7,7 +7,7 @@
 #include <FL/Fl_Text_Buffer.H>
 
 #include <cstdio>
-
+#include <string>
 
 class StickyNoteApp {
 private:
@@ -18,6 +18,13 @@ private:
     bool text_changed;
     char filename[FILENAME_MAX];
 
+private:
+    int window_x;
+    int window_y;
+    int window_width;
+    int window_height;
+
+private:
     void update_title();
 
     static void menu_new_callback    (Fl_Widget*, void *v);
@@ -34,6 +41,9 @@ public:
     void set_changed(bool changed);
     bool is_text_changed() const;
     const char* get_filename() const;
+
+    void save_property();
+    void load_property();
 };
 
 #endif // APP_H
