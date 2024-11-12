@@ -83,8 +83,13 @@ void StickyNoteApp::handleMenu(const std::string& label) {
 
 // Action methods
 void StickyNoteApp::menu_new_action() {
-    text_buffer.text("");
-    set_changed(false);
+    //v 1
+    //text_buffer.text("");
+    //set_changed(false);
+
+    //v2
+    StickyNoteApp *new_window = new StickyNoteApp();
+    new_window->show();
 }
 
 void StickyNoteApp::menu_open_action() {
@@ -105,6 +110,7 @@ void StickyNoteApp::menu_open_action() {
             set_changed(false);
 
             //load_property();
+            //Instead the window_x we can youse x()
             //window->resize(app->window_x, app->window_y, app->window_width, app->window_height);
             //window->redraw();
         }
@@ -276,6 +282,8 @@ int StickyNoteApp::handle(int event) {
     static int click_x = 0, click_y = 0;
     static bool resizing_right = false;
     static bool resizing_bottom = false;
+    static bool resizing_left = false;
+    static bool resizing_top = false;
     const int resize_border = 10;
 
     switch (event) {
@@ -283,15 +291,32 @@ int StickyNoteApp::handle(int event) {
             int mouse_x = Fl::event_x();
             int mouse_y = Fl::event_y();
 
-            if (mouse_x >= w() - resize_border) {
+            // Изменение курсора для правой границы
+            if (mouse_x >= w() - resize_border && mouse_y < h() - resize_border) {
                 cursor(FL_CURSOR_WE);
                 return 1;
             }
-            
-            if (mouse_y >= h() - resize_border) {
+
+            // Изменение курсора для нижней границы
+            if (mouse_y >= h() - resize_border && mouse_x < w() - resize_border) {
                 cursor(FL_CURSOR_NS);
                 return 1;
-            } 
+            }
+
+            // Изменение курсора для левой границы
+            if (mouse_x <= resize_border && mouse_y < h() - resize_border) {
+                cursor(FL_CURSOR_WE);
+                return 1;
+            }
+
+            // Изменение курсора для верхней границы
+            if (mouse_y <= resize_border && mouse_x < w() - resize_border) {
+                cursor(FL_CURSOR_NS);
+                return 1;
+            }
+
+            // Сброс курсора, если не на границе
+            //cursor(FL_CURSOR_DEFAULT); 
         }
         break;
 
@@ -300,20 +325,32 @@ int StickyNoteApp::handle(int event) {
                 click_x = Fl::event_x();
                 click_y = Fl::event_y();
 
-                // Checking Window drag
+                // Проверка на перетаскивание окна по заголовку
                 if (Fl::belowmouse() == &titlebar) {
                     return 1;
                 }
 
-                // Checking if the mouse was clicked on the right border
+                // Проверка для правой границы
                 if (click_x >= w() - resize_border && click_y < h() - resize_border) {
                     resizing_right = true;
                     return 1;
                 }
 
-                // Checking if the mouse was pressed on the bottom border
+                // Проверка для нижней границы
                 if (click_y >= h() - resize_border && click_x < w() - resize_border) {
                     resizing_bottom = true;
+                    return 1;
+                }
+
+                // Проверка для левой границы
+                if (click_x <= resize_border && click_y < h() - resize_border) {
+                    resizing_left = true;
+                    return 1;
+                }
+
+                // Проверка для верхней границы
+                if (click_y <= resize_border && click_x < w() - resize_border) {
+                    resizing_top = true;
                     return 1;
                 }
             }
@@ -324,11 +361,13 @@ int StickyNoteApp::handle(int event) {
                 int dx = Fl::event_x() - click_x;
                 int dy = Fl::event_y() - click_y;
 
+                // Перетаскивание окна по заголовку
                 if (Fl::belowmouse() == &titlebar) {
                     position(x() + dx, y() + dy);
                     return 1;
                 }
 
+                // Изменение размера справа
                 if (resizing_right) {
                     size(w() + dx, h());
                     click_x = Fl::event_x();
@@ -336,18 +375,21 @@ int StickyNoteApp::handle(int event) {
                     return 1;
                 }
 
+                // Изменение размера снизу
                 if (resizing_bottom) {
                     size(w(), h() + dy);
                     click_y = Fl::event_y();
                     close_button.resize(w() - 25, 0, 25, 25);
                     return 1;
                 }
+
+                //TODO for left and top
             }
             break;
 
         case FL_RELEASE:
-            resizing_right = false;
-            resizing_bottom = false;
+            // Сброс всех флагов изменения размера
+            resizing_right = resizing_bottom = resizing_left = resizing_top = false;
             return 1;
 
         default:

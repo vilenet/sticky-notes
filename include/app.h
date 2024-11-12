@@ -32,14 +32,11 @@ private:
     char filename[FILENAME_MAX];
 
 private:
-    int window_x;
-    int window_y;
-    int window_width;
-    int window_height;
-
-public:
-    int handle(int event) override;
-    void draw() override;
+    // We dont need this, there is w(), h() methods
+    // int window_x;
+    // int window_y;
+    // int window_width;
+    // int window_height;
 
 private:
     std::vector<Fl_Menu_Item> items = {
@@ -76,6 +73,10 @@ public:
 
     //void save_property();
     //void load_property();
+
+public:
+    int handle(int event) override;
+    void draw() override;
 };
 
 #endif // APP_H
