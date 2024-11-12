@@ -1,0 +1,28 @@
+Временные заметки:
+
+Для запуска программы на другом комьпютере нужно:
+Вариант 1: 
+    Собрать со статической линковкой
+    Сделать установщик. TODO 
+
+Вариант 2: 
+    Динамическая линковка требует зависимости которые необзодимо поставить вместе с программой
+    TODO
+
+1 Скопировать необходимые DLL файлы вручную
+    libgcc_s_seh-1.dll 
+    libstdc++-6.dll 
+    libwinpthread-1.dll
+
+    (Эти библиотеки можно найти в папке C:\msys64\mingw64\bin (если вы используете MSYS2/MinGW))
+
+    libfltk.dll
+    libfltk_forms.dll 
+    libfltk_images.dll
+    libfltk_jpeg.dll 
+    libfltk_png.dll
+    libfltk_z.dll 
+
+2 Или Сделать статическую линковку
+
+set(CMAKE_EXE_LINKER_FLAGS "-static")
