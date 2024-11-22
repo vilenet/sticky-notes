@@ -1,6 +1,6 @@
 # Sticky Notes Program — Version 1
 
-- [Version 2](https://github.com/vilenet/sticky-notes2.git)
+- [Actual Alpha Version 2](https://github.com/vilenet/sticky-notes2.git)
 
 ### Overview
 This is the **first version** of the Sticky Notes program, which removes the standard **Win32 title bar** and implements a fully custom title bar using **FLTK**. This version does not rely on the native WinAPI for window controls, allowing for complete customization of the window's appearance and behavior.
